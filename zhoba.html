@@ -1,0 +1,732 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore the sacred places and natural landmarks of Mangystau, Kazakhstan.">
+  <title>Mangystau — Sacred Places</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #0891b2;
+      --accent2: #f97316;
+      --border: rgba(15, 23, 42, .10);
+      --shadow: 0 8px 24px rgba(15, 23, 42, .08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(rgba(248,250,252,.88), rgba(248,250,252,.92)),
+        url("https://adamdar.ca/media/posts/220/5fba77e870ab0.jpg") center/cover fixed no-repeat;
+    }
+
+    body.dark {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f1f5f9;
+      --muted: #cbd5e1;
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 8px 24px rgba(0,0,0,.22);
+      background: #0f172a;
+    }
+
+    header {
+      max-width: 1120px;
+      margin: 20px auto;
+      padding: 18px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      flex: 0 0 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: white;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+
+    h1 {
+      font-size: clamp(1.25rem, 3vw, 1.8rem);
+      margin: 0;
+    }
+
+    .lead {
+      color: var(--muted);
+      margin: 6px 0 0;
+      font-size: .95rem;
+    }
+
+    .header-actions { margin-left: auto; }
+
+    .container {
+      max-width: 1120px;
+      padding: 0 18px;
+      margin: 0 auto 28px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    #q {
+      flex: 1 1 240px;
+      min-width: 180px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button { font: inherit; cursor: pointer; }
+
+    .chip, .btn {
+      padding: 10px 13px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+    }
+
+    .chip.active, .btn.primary {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 15px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .card:hover, .card:focus-visible {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(15,23,42,.14);
+      outline: 2px solid var(--accent);
+    }
+
+    .thumb {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      display: block;
+      background: #e2e8f0;
+    }
+
+    .meta { padding: 14px; }
+
+    .meta h2 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .meta p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.5;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 5px 8px;
+      border-radius: 8px;
+      background: rgba(8,145,178,.12);
+      color: var(--accent);
+      font-size: .8rem;
+    }
+
+    .panel {
+      background: var(--card);
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .panel strong {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    iframe.map {
+      width: 100%;
+      height: 230px;
+      border: 0;
+      border-radius: 10px;
+    }
+
+    .guide {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .guide img {
+      width: 76px;
+      height: 76px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .guide p {
+      color: var(--muted);
+      font-size: .88rem;
+      margin: 6px 0;
+      line-height: 1.45;
+    }
+
+    .guide a { color: var(--accent); }
+
+    .video {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    .video iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    #nores {
+      display: none;
+      text-align: center;
+      color: var(--muted);
+      padding: 24px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 26px 12px;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      padding: 18px;
+      background: rgba(2,6,23,.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-card {
+      width: min(900px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 18px;
+      padding: 18px;
+      background: var(--card);
+      color: var(--text);
+      border-radius: 16px;
+      box-shadow: 0 30px 70px rgba(0,0,0,.3);
+    }
+
+    .modal-card img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .modal-card p {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .modal-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .close {
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+
+    #intro {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      text-align: center;
+      color: white;
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #0891b2, #f97316);
+      animation: introOut 2.5s ease .4s forwards;
+      pointer-events: none;
+    }
+
+    @keyframes introOut {
+      0%, 75% { opacity: 1; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    @media (max-width: 850px) {
+      .layout { grid-template-columns: 1fr; }
+      .modal-card { grid-template-columns: 1fr; }
+      .modal-card img { height: 220px; }
+      .header-actions { margin-left: 0; }
+      header { flex-wrap: wrap; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+	
+	
+.video-cover {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.video-cover img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.video-cover:hover img {
+  transform: scale(1.05);
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: #ff0000;
+  border-radius: 12px;
+  font-size: 24px;
+  transition: background 0.3s ease;
+}
+
+.video-cover:hover .play-button {
+  background: #cc0000;
+}
+
+  </style>
+</head>
+
+<body>
+  <div id="intro">Welcome to Majestic Mangystau!</div>
+
+  <header>
+    <div class="logo" aria-hidden="true">MA</div>
+    <div>
+      <h1>Mangystau — Sacred Places</h1>
+      <p class="lead">
+        Discover sacred sites, remarkable mountains, canyons,
+        and natural landmarks of western Kazakhstan.
+      </p>
+    </div>
+    <div class="header-actions">
+      <button class="btn" id="themeToggle" type="button" aria-pressed="false">
+        Switch to dark mode
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="controls" aria-label="Search and filters">
+      <input id="q" type="search"
+        placeholder="Search places, e.g. Sherkala"
+        aria-label="Search places">
+
+      <div class="filters" aria-label="Filter by place type">
+        <button class="chip active" type="button"
+          data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" type="button"
+          data-filter="Mausoleum" aria-pressed="false">Mausoleum</button>
+        <button class="chip" type="button"
+          data-filter="Cave" aria-pressed="false">Cave</button>
+        <button class="chip" type="button"
+          data-filter="Mountain" aria-pressed="false">Mountain / Nature</button>
+        <button class="chip" type="button"
+          data-filter="Well" aria-pressed="false">Well</button>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section>
+        <div id="cards" class="cards" aria-live="polite"></div>
+        <div id="nores">No places found. Try another search term or filter.</div>
+      </section>
+
+      <aside>
+        <div class="panel">
+          <strong>Explore Mangystau on the map</strong>
+          <iframe class="map" title="Map of Mangystau, Kazakhstan"
+            loading="lazy"
+            src="https://maps.google.com/maps?q=43.6550,51.1711&z=8&output=embed"></iframe>
+        </div>
+
+        <div class="panel guide">
+          <img
+            src="https://ep00.epimg.net/elviajero/imagenes/2019/03/12/album/1552413187_226567_1552413862_album_normal.jpg"
+            alt="Tour guide portrait">
+          <div>
+            <strong>Bagdat Besmaganbetov</strong>
+            <p>
+              Professional guide for the Mangystau region,
+              including Bozzhyra, Sherkala, and Tupqaraghan.
+            </p>
+            <a href="https://www.instagram.com/bagdat_besmaganbetov/"
+              target="_blank" rel="noopener noreferrer">Instagram page</a>
+          </div>
+        </div>
+
+   <div class="panel">
+  <strong>Video about Mangystau</strong>
+
+  <a
+    href="https://youtu.be/7HuL87YVl5o"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="video-cover"
+    aria-label="Watch video about Mangystau on YouTube"
+  >
+    <img
+      src="https://img.youtube.com/vi/7HuL87YVl5o/maxresdefault.jpg"
+      alt="Beautiful landscapes of Mangystau"
+      onerror="this.onerror=null;this.src='https://img.youtube.com/vi/7HuL87YVl5o/hqdefault.jpg';"
+    >
+
+    <span class="play-button">▶</span>
+  </a>
+</div>
+  </main>
+
+  <footer>© 2026 — Mangystau Sacred Places</footer>
+
+  <div id="modal" class="modal" role="dialog"
+    aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div>
+        <img id="modalImg" src="" alt="">
+        <button id="openMapBtn" class="btn primary"
+          type="button" style="margin-top:10px">
+          Open location in Google Maps
+        </button>
+      </div>
+
+      <div>
+        <div class="modal-top">
+          <div>
+            <h2 id="modalTitle"></h2>
+            <div id="modalType" class="tag"></div>
+          </div>
+          <button id="closeModal" class="close"
+            type="button" aria-label="Close details">&times;</button>
+        </div>
+        <p id="modalDesc"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Edit the place details in this array to update the website.
+    const PLACES = [
+      {
+        title: "Beket-Ata Underground Mosque",
+        type: "Mausoleum",
+        img: "https://wildticketasia.com/uploads/posts/2023-04/1682595513_tour-beket-ata-mosque-1.jpg",
+        coords: "44.7281,52.3419",
+        desc: "Beket-Ata is a revered spiritual site in the Oglandy area of Mangystau. The underground mosque is associated with the 18th-century religious teacher Beket-Ata and attracts pilgrims from across Kazakhstan and beyond."
+      },
+      {
+        title: "Shopan-Ata Necropolis",
+        type: "Mausoleum",
+        img: "https://wildticketasia.com/uploads/posts/2022-04/1648970426_shopan-ata-mosque-6.jpg",
+        coords: "44.0580,52.9294",
+        desc: "Shopan-Ata is an important sacred complex in Mangystau, known for its underground mosque and extensive necropolis. Local tradition remembers Shopan-Ata as a spiritual guide and the patron of shepherds."
+      },
+      {
+        title: "Shakpak-Ata Underground Mosque",
+        type: "Cave",
+        img: "https://mangystau.inmap.kz/3d/panorams/shakpak-ata/images/4.jpg",
+        coords: "44.4983,52.0031",
+        desc: "Shakpak-Ata is an unusual underground mosque carved into a limestone cliff on the Tupqaraghan Peninsula. The site is notable for its rock-cut architecture, historic inscriptions, and surrounding necropolis."
+      },
+      {
+        title: "Otpan-Tau",
+        type: "Mountain",
+        img: "https://mangystau.inmap.kz/uploads/images/large_adaiata3__6761150f5a8415b606093786562939a7.jpg",
+        coords: "44.330,52.620",
+        desc: "Otpan-Tau is a historical and cultural complex in the Karatau range. In local history, beacon fires on the mountain served as signals in times of danger. Today, the site is associated with the Adai Ata monument and the idea of unity."
+      },
+      {
+        title: "Karaman-Ata Necropolis",
+        type: "Mausoleum",
+        img: "https://wildticketasia.com/uploads/posts/2023-10/1696884836_karaman-ata-necropolis-11.jpg",
+        coords: "44.3,52.1",
+        desc: "Karaman-Ata is a historic underground mosque and necropolis in Mangystau. The complex is valued for its religious heritage, stone architecture, and the many burial monuments that reflect the region's long history."
+      },
+      {
+        title: "Sherkala Mountain",
+        type: "Mountain",
+        img: "https://massaget.kz/userdata/news/news_39465/image_l.jpg",
+        coords: "43.9,51.2",
+        desc: "Sherkala Mountain is one of Mangystau's best-known natural landmarks. Its distinctive shape is often compared to a lion resting on the steppe, and the name Sherkala is commonly interpreted as “Lion Mountain.” The surrounding area contains traces of historic routes and settlements. Visitors are drawn to its dramatic silhouette, wide open landscapes, and geological features."
+      },
+      {
+        title: "Bozzhyra Valley",
+        type: "Mountain",
+        img: "https://th.bing.com/th/id/R.e51d86c661c220cae2f8ff7e5331a107?rik=wCVjnS6PfIiF3A&pid=ImgRaw&r=0",
+        coords: "43.6,52.2",
+        desc: "Bozzhyra is a spectacular landscape on the Ustyurt Plateau, famous for its pale limestone cliffs, dramatic ridges, and isolated rock formations. The scenery changes with the sunlight, appearing white, gold, or lavender at different times of day. The wider region supports wildlife adapted to arid environments. Visitors should plan carefully because facilities are limited in remote areas."
+      },
+      {
+        title: "Ustyurt State Nature Reserve",
+        type: "Mountain",
+        img: "https://qazaqstan3d.kz/upload/orig/place/650737_1504284049.jpg",
+        coords: "44.0,51.6",
+        desc: "Ustyurt State Nature Reserve was established in 1984 to protect the desert and semi-desert ecosystems of the Ustyurt Plateau in southwestern Kazakhstan. Its landscapes include cliffs, plateaus, and arid habitats that support rare plants and animals. Wildlife in the wider region includes goitered gazelles and several species of birds."
+      },
+      {
+        title: "Tamshaly Canyon",
+        type: "Mountain",
+        img: "https://womanadvice.ru/sites/default/files/tempos/kanon_tamshaly_0.jpg",
+        coords: "43.5,51.8",
+        desc: "Tamshaly is a scenic canyon near Fort-Shevchenko. Water seeps and drips from the rock face into a small green area, creating a striking contrast with the surrounding dry landscape. The local water and vegetation create a distinctive microclimate."
+      },
+      {
+        title: "Ybykty Sai",
+        type: "Mountain",
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5fgTcvae10cPIh57Cr6HqmyqZRNbTDYcnJnN2acqSjrGNBF_KDi9yYLnb&s=10",
+        coords: "43.7,52.1",
+        desc: "Ybykty Sai is a unique natural attraction in the Mangystau region of western Kazakhstan. It is known for its unusual rock formations, narrow passages, and beautiful geological landscape."
+      }
+    ];
+
+    const cardsEl = document.getElementById("cards");
+    const qEl = document.getElementById("q");
+    const chips = document.querySelectorAll(".chip");
+    const nores = document.getElementById("nores");
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modalImg");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalType = document.getElementById("modalType");
+    const modalDesc = document.getElementById("modalDesc");
+    const openMapBtn = document.getElementById("openMapBtn");
+
+    let activeFilter = "all";
+    let selectedPlace = null;
+
+    function render(places) {
+      cardsEl.replaceChildren();
+      nores.style.display = places.length ? "none" : "block";
+
+      places.forEach(place => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.tabIndex = 0;
+        card.setAttribute("role", "button");
+        card.setAttribute("aria-label", `View details for ${place.title}`);
+
+        const img = document.createElement("img");
+        img.className = "thumb";
+        img.src = place.img;
+        img.alt = place.title;
+        img.loading = "lazy";
+        img.onerror = () => { img.style.display = "none"; };
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+
+        const title = document.createElement("h2");
+        title.textContent = place.title;
+
+        const desc = document.createElement("p");
+        desc.textContent = place.desc;
+
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = place.type;
+
+        meta.append(title, desc, tag);
+        card.append(img, meta);
+
+        card.addEventListener("click", () => openModal(place));
+
+        card.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openModal(place);
+          }
+        });
+
+        cardsEl.appendChild(card);
+      });
+    }
+
+    function applyFilters() {
+      const query = qEl.value.trim().toLocaleLowerCase();
+
+      const filtered = PLACES.filter(place => {
+        const matchesType =
+          activeFilter === "all" || place.type === activeFilter;
+
+        const searchableText =
+          `${place.title} ${place.type} ${place.desc}`.toLocaleLowerCase();
+
+        const matchesQuery =
+          !query || searchableText.includes(query);
+
+        return matchesType && matchesQuery;
+      });
+
+      render(filtered);
+    }
+
+    function openModal(place) {
+      selectedPlace = place;
+      modalImg.src = place.img;
+      modalImg.alt = place.title;
+      modalTitle.textContent = place.title;
+      modalType.textContent = place.type;
+      modalDesc.textContent = place.desc;
+      modal.classList.add("open");
+      document.getElementById("closeModal").focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove("open");
+    }
+
+    chips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        chips.forEach(item => {
+          item.classList.remove("active");
+          item.setAttribute("aria-pressed", "false");
+        });
+
+        chip.classList.add("active");
+        chip.setAttribute("aria-pressed", "true");
+        activeFilter = chip.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    qEl.addEventListener("input", applyFilters);
+
+    document.getElementById("closeModal")
+      .addEventListener("click", closeModal);
+
+    modal.addEventListener("click", event => {
+      if (event.target === modal) closeModal();
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeModal();
+    });
+
+    openMapBtn.addEventListener("click", () => {
+      if (selectedPlace) {
+        window.open(
+          `https://www.google.com/maps?q=${encodeURIComponent(selectedPlace.coords)}`,
+          "_blank",
+          "noopener,noreferrer"
+        );
+      }
+    });
+
+    document.getElementById("themeToggle")
+      .addEventListener("click", event => {
+        const enabled = document.body.classList.toggle("dark");
+
+        event.currentTarget.textContent =
+          enabled ? "Switch to light mode" : "Switch to dark mode";
+
+        event.currentTarget.setAttribute("aria-pressed", String(enabled));
+      });
+
+    applyFilters();
+
+    window.setTimeout(() => {
+      const intro = document.getElementById("intro");
+      if (intro) intro.remove();
+    }, 3100);
+  </script>
+</body>
+</html>
